@@ -56,7 +56,7 @@
   display: block;
 }
 
-.teacher-item footer button {
+.teacher-item footer a {
   width: 20rem;
   height: 5.6rem;
   background: var(--color-secundary);
@@ -86,12 +86,12 @@
     display: initial;
     margin-left: 1.6rem;
   }
-  .teacher-item footer p button {
+  .teacher-item footer button {
     width: 24.5rem;
     font-size: 1.6rem;
     justify-content: center;
   }
-  .teacher-item footer p button img {
+  .teacher-item footer button img {
     margin-right: 1.6rem;
   }
 }

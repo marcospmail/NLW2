@@ -13,6 +13,8 @@ export default class ClassesController {
   async index(request: Request, response: Response) {
     const filters = request.query
 
+    console.log(filters)
+
     const week_day = filters.week_day as string
     const subject = filters.subject as string
     const time = filters.time as string
@@ -24,17 +26,19 @@ export default class ClassesController {
     const timeInMinutes = convertHourToMinutes(time)
 
     const schedule = await db('classes')
-      .whereExists(function() {
-        this.select('class_schedule.*')
-          .from('class_schedule')
-          .whereRaw('`class_schedule`.`week_day` = ??', [Number(week_day)])
-          .whereRaw('`class_schedule`.`from` <= ??', [timeInMinutes])
-          .whereRaw('`class_schedule`.`to` > ??', [timeInMinutes])
-      })
-      .where('classes.subject', '=', subject)
-      .join('users', 'classes.user_id', '=', 'users.id')
-      .select(['classes.*', 'users.*'])
-
+    .where('classes.subject', '=', subject)
+    .join('users', 'classes.user_id', '=', 'users.id')
+    .join('class_schedule', 'class_schedule.class_id', '=', 'classes.id')
+    .select(['classes.*', 'users.*', 'class_schedule.*'])
+    .whereExists(function () {
+      this.select('class_schedule.*')
+        .from('class_schedule')
+        .whereRaw('`class_schedule`.`week_day` = ?', [week_day])
+        .whereRaw('`class_schedule`.`from` <= ?', [timeInMinutes])
+        .whereRaw('`class_schedule`.`to` > ?', [timeInMinutes])
+        .whereRaw('`class_schedule`.`class_id` = `classes`.`id`')
+    })
+    
     return response.json(schedule)
   }
 
@@ -45,18 +49,26 @@ export default class ClassesController {
 
     try {
 
-      const [user_id] = await trx('users').insert({
-        name,
-        avatar,
-        whatsapp,
-        bio
-      })
+      const  [user] = await trx('users').where({ name })
+
+      let user_id = user ? user.id : null
+
+      if (!user_id) {
+        [user_id] = await trx('users').insert({
+          name,
+          avatar,
+          whatsapp,
+          bio
+        })
+      }
 
       const [class_id] = await trx('classes').insert({
         user_id,
         subject,
         cost
       })
+
+
 
       const classSchedule = schedule.map((s: ScheduleItem) => {
         return {
@@ -74,6 +86,8 @@ export default class ClassesController {
       return response.status(201).send()
 
     } catch (err) {
+      console.log('errorrrr', err)
+
       trx.rollback()
 
       return response.status(400).json({

@@ -15,8 +15,12 @@
   position: relative;
 }
 
-#search-teachers .input-block+.input-block {
+#search-teachers .input-block+.input-block, #search-teachers .select-block+.input-block {
   margin-top: 1.4rem;
+}
+
+#search-teachers main fieldset .input-block+.textarea-block, #page-teacher-form main fieldset .select-block+.input-block {
+  margin-top: 2.4rem;
 }
 
 #search-teachers .input-block label {
@@ -35,6 +39,24 @@
   font: 1.6rem Archivo;
 }
 
+#search-teachers button {
+  height: 5.6rem;
+  width: 100%;
+  background: var(--color-secundary);
+  color: var(--color-button-text);
+  border: 0;
+  border-radius: 0.8rem;
+  cursor: pointer;
+  font: 700 1.6rem Archivo;
+  text-decoration: none;
+  align-self: flex-end;
+  transition: background-color .2s;
+}
+
+#search-teachers button:hover {
+  background: var(--color-secundary-dark);
+}
+
 #search-teachers .input-block:focus-within::after {
   content: '';
   width: calc(100% - 3.2rem);
@@ -51,19 +73,18 @@
   width: 90%;
 }
 
-
 @media(min-width: 700px) {
   #page-teacher-list {
     max-width: 100%;
   }
   #search-teachers {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     column-gap: 16px;
     position: absolute;
     bottom: -28px;
   }
-  #search-teachers .input-block+.input-block {
+  #search-teachers .input-block+.input-block, #search-teachers .select-block+.select-block, #search-teachers .select-block+.input-block {
     margin-top: 0rem;
   }
   #page-teacher-list main {
@@ -71,6 +92,4 @@
     max-width: 740px;
     margin: 0 auto;
   }
-  
-  
 }

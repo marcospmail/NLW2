@@ -1,31 +1,76 @@
-import React from 'react';
+import React, { useState, useCallback, ChangeEvent, FormEvent } from 'react';
+import api from '../../services/api'
 
 import PageHeader from '../../components/PageHeader';
+import Input from '../../components/Input';
+import TeacherItem, { ClassProps } from '../../components/TeacherItem';
+import Select from '../../components/Select';
+
+import subjects from '../../utils/subjects'
+import weekDays from '../../utils/weekDays'
 
 import './styles.css'
-import TeacherItem from '../../components/TeacherItem';
+
+export interface ScheduleFilterProps {
+  week_day: number,
+  subject: string,
+  time: string
+}
 
 const TeachersList: React.FC = () => {
+  const defaultScheduleFilter: ScheduleFilterProps = {
+    week_day: 0,
+    subject: subjects[0].value,
+    time: ''
+  }
+
+  const [scheduleFilter, setScheduleFilter] = useState<ScheduleFilterProps>(defaultScheduleFilter)
+  const [classes, setClasses] = useState<Array<ClassProps>>([])
+
+  function handleFilterChange(e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) {
+    const { id, value }: { id: string, value: string } = e.target
+    setScheduleFilter({ ...scheduleFilter, [id]: value })
+  }
+
+  const fetchClassesCallback = useCallback(async function fetchClasses() {
+    try {
+      const response = await api.get('classes', {
+        params: {
+          ...scheduleFilter
+        }
+      })
+
+      setClasses(response.data)
+    }
+    catch (err) {
+    }
+
+  }, [scheduleFilter])
+
+  function handleSubmit(e: FormEvent) {
+    e.preventDefault()
+    fetchClassesCallback()
+  }
+
   return (
     <div id="page-teacher-list" className="container">
       <PageHeader title="Estes são os proffys disponíveis." >
 
-        <form id="search-teachers">
+        <form id="search-teachers" onSubmit={handleSubmit}>
 
-          <div className="input-block">
-            <label htmlFor="subject">Matéria</label>
-            <input type="text" id="subject" />
-          </div>
+          <Select id="subject" label="Subject"
+            onChange={handleFilterChange}
+            options={subjects} />
 
-          <div className="input-block">
-            <label htmlFor="week_day">Dia da semana</label>
-            <input type="text" id="week_day" />
-          </div>
+          <Select id="week_day" label="Week Day"
+            onChange={handleFilterChange}
+            options={weekDays} />
 
-          <div className="input-block">
-            <label htmlFor="time">Hora</label>
-            <input type="text" id="time" />
-          </div>
+          <Input id="time" label="Hora" type="time"
+            onChange={handleFilterChange}
+          />
+
+          <button type="submit">Buscar</button>
 
         </form>
 
@@ -33,11 +78,7 @@ const TeachersList: React.FC = () => {
 
       <main>
 
-        <TeacherItem />
-        <TeacherItem />
-        <TeacherItem />
-        <TeacherItem />
-        <TeacherItem />
+        {classes.map(c => (<TeacherItem key={c.id} teacher={c} />))}
 
       </main>
 

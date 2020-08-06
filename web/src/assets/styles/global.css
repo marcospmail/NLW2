@@ -17,6 +17,7 @@
   --color-button-text: #FFFFFF;
   --color-box-base: #FFFFFF;
   --color-box-footer: #FAFAFC;
+
   font-size: 60%;
 }
 
@@ -51,7 +52,7 @@ body, button, input, textarea {
 }
 
 @media(min-width: 700px) {
-  #root {
+  :root {
     font-size: 62.5%;
   }
 }

@@ -1,35 +1,74 @@
 import React from 'react';
+import api from '../../services/api';
 
 import whatsAppIcon from '../../assets/images/icons/whatsapp.svg'
 
 import './styles.css'
 
-const TeacherItem: React.FC = () => {
+export interface ScheduleProps {
+  week_day: number,
+  from: string,
+  to: string
+}
+export interface TeacherProps {
+  id?: number,
+  name: string,
+  avatar: string,
+  whatsapp: string,
+  bio: string,
+  subject: string,
+  schedule: Array<ScheduleProps>
+}
+
+export interface ClassProps extends TeacherProps {
+  cost: number
+}
+
+export interface TeacherItemProps {
+  teacher: ClassProps
+}
+
+const TeacherItem: React.FC<TeacherItemProps> = ({ teacher }) => {
+
+  async function createNewConnection() {
+    try {
+      await api.post('connections', {
+        user_id: teacher.id
+      })
+
+      alert('Connected!')
+    }
+    catch (err) {
+      alert(err.message)
+    }
+  }
+
+
   return (
     <article className="teacher-item">
       <header>
-        <img src="https://avatars1.githubusercontent.com/u/7114995?s=460&u=abc163254d341164a15b6f3f09ae8c03c16e16fc&v=4" alt="Teachers photo" />
+        <img src={teacher.avatar} alt="Teacher" />
         <div>
-          <strong>Marcos Paulo</strong>
-          <span>Química</span>
+          <strong>{teacher.name}</strong>
+          <span>{teacher.subject}</span>
         </div>
       </header>
 
       <p>
-        asdiho ad iosahd osah as ihasasdiho ad iosahd osah as ihasasdiho ad iosahd osah as ihasasdiho ad iosahd osah as ihas
-      <br /><br />
-      asdiho ad iosahd osah as ihasasdiho ad iosahd osah as ihasasdiho ad iosahd osah as ihasasdiho ad iosahd osah as ihasasdiho ad iosahd osah as ihasasdiho ad iosahd osah as ihasasdiho ad iosahd osah as ihasasdiho ad iosahd osah as ihasasdiho ad iosahd osah as ihasasdiho ad iosahd osah as ihasasdiho ad iosahd osah as ihasasdiho ad iosahd osah as ihasasdiho ad iosahd osah as ihasasdiho ad iosahd osah as ihasasdiho ad iosahd osah as ihasasdiho ad iosahd osah as ihasasdiho ad iosahd osah as ihasasdiho ad iosahd osah as ihasasdiho ad iosahd osah as ihasasdiho ad iosahd osah as ihasasdiho ad iosahd osah as ihasasdiho ad iosahd osah as ihasasdiho ad iosahd osah as ihasasdiho ad iosahd osah as ihas
-    </p>
+        {teacher.bio}
+        <br /><br />
+        {teacher.bio}
+      </p>
 
       <footer>
         <p>
           Preço/hora
-        <strong>R$ 50,00</strong>
+        <strong>R$ {teacher.cost}</strong>
         </p>
-        <button type="button">
+        <a onClick={createNewConnection} target="_blank" rel="noopener noreferrer" href={`https://wa.me/${teacher.whatsapp}`}>
           <img src={whatsAppIcon} alt="Whatsapp" />
         Entrar em contato
-      </button>
+        </a>
       </footer>
 
     </article>
