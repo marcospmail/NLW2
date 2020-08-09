@@ -50,7 +50,7 @@ const Landing: React.FC = () => {
         </div>
 
         <span className="total-connection">
-          Total de {connections} conexões já realizadas <img src={purpleHeartIcon} alt="Coração roxo" />
+          {connections} connections already made <img src={purpleHeartIcon} alt="Coração roxo" />
         </span>
 
       </div>
