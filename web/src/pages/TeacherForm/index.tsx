@@ -18,7 +18,7 @@ import './styles.css'
 
 const TeachersForm: React.FC = () => {
   const defaultSchedule: ScheduleProps = {
-    week_day: 0,
+    week_day: Number(weekDays[0].value),
     from: '',
     to: ''
   }
@@ -28,7 +28,7 @@ const TeachersForm: React.FC = () => {
     avatar: '',
     whatsapp: '',
     bio: '',
-    subject: '',
+    subject: subjects[0].value,
     schedule: [defaultSchedule]
   }
 
@@ -58,8 +58,6 @@ const TeachersForm: React.FC = () => {
     const newSchedule = data.schedule.filter((s, sIndex) => sIndex !== index)
 
     setData({ ...data, schedule: newSchedule })
-
-    //TODO remove from database
   }
 
   function handleDataChange(e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) {
@@ -87,8 +85,8 @@ const TeachersForm: React.FC = () => {
 
   return (
     <div id="page-teacher-form" className="container">
-      <PageHeader title="Que incrível que você quer dar aulas."
-        description="I dont remember what the text"
+      <PageHeader title="It's awesome that you want to teach!"
+        description="Please fill in your data"
       />
 
       <form onSubmit={handleSubmit}>
@@ -144,7 +142,7 @@ const TeachersForm: React.FC = () => {
             <p>
               <img src={warningIcon} alt="Important Information" />
             Important < br />
-            Fill all the data
+            Fill all fields
           </p>
 
             <button type="submit">Register</button>

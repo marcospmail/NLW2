@@ -1,5 +1,5 @@
 const subjects = [
-  { value: 'Maths', label: 'Maths' },
+  { value: 'Math', label: 'Math' },
   { value: 'Algebra', label: 'Algebra' },
   { value: 'Geometry', label: 'Geometry' },
   { value: 'Science', label: 'Science' },

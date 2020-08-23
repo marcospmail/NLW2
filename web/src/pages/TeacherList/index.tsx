@@ -19,7 +19,7 @@ export interface ScheduleFilterProps {
 
 const TeachersList: React.FC = () => {
   const defaultScheduleFilter: ScheduleFilterProps = {
-    week_day: 0,
+    week_day: Number(weekDays[0].value),
     subject: subjects[0].value,
     time: ''
   }
@@ -54,7 +54,7 @@ const TeachersList: React.FC = () => {
 
   return (
     <div id="page-teacher-list" className="container">
-      <PageHeader title="Estes são os proffys disponíveis." >
+      <PageHeader title="These are the Proffys available" >
 
         <form id="search-teachers" onSubmit={handleSubmit}>
 
@@ -70,7 +70,7 @@ const TeachersList: React.FC = () => {
             onChange={handleFilterChange}
           />
 
-          <button type="submit">Buscar</button>
+          <button type="submit">Search</button>
 
         </form>
 

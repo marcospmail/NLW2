@@ -30,27 +30,27 @@ const Landing: React.FC = () => {
 
         <div className="logo-container">
           <img src={logoImg} alt="Proffy" />
-          <h2>Sua plataforma de estudos online.</h2>
+          <h2>Your study place.</h2>
         </div>
 
-        <img src={landingImg} alt="Plataforma de estudos" className="hero-image" />
+        <img src={landingImg} alt="Study platform" className="hero-image" />
 
         <div className="buttons-container">
 
           <Link to="/study" className="study">
-            <img src={studyIcon} alt="Estudar" />
-            Estudar
+            <img src={studyIcon} alt="Study" />
+            Study
           </Link>
 
           <Link to="/give-classes" className="give-classes">
-            <img src={giveClassesIcon} alt="Dar aulas" />
-            Dar aulas
+            <img src={giveClassesIcon} alt="Teach" />
+            Teach
           </Link>
 
         </div>
 
         <span className="total-connection">
-          {connections} connections already made <img src={purpleHeartIcon} alt="Coração roxo" />
+          {connections > 0 ? `${connections} connections already made` : 'no connection made yet'} <img src={purpleHeartIcon} alt="Coração roxo" />
         </span>
 
       </div>

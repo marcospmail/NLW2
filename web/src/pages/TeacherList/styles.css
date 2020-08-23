@@ -1,6 +1,8 @@
 #page-teacher-list {
   width: 100vw;
   height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 #search-teachers {
@@ -49,8 +51,9 @@
   cursor: pointer;
   font: 700 1.6rem Archivo;
   text-decoration: none;
-  align-self: flex-end;
   transition: background-color .2s;
+  margin-top: 1.4rem;
+  outline: 0;
 }
 
 #search-teachers button:hover {
@@ -83,6 +86,7 @@
     column-gap: 16px;
     position: absolute;
     bottom: -28px;
+    align-items: flex-end;
   }
   #search-teachers .input-block+.input-block, #search-teachers .select-block+.select-block, #search-teachers .select-block+.input-block {
     margin-top: 0rem;
