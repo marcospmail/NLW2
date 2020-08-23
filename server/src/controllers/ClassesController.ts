@@ -8,12 +8,9 @@ interface ScheduleItem {
   to: string
 }
 
-
 export default class ClassesController {
   async index(request: Request, response: Response) {
     const filters = request.query
-
-    console.log(filters)
 
     const week_day = filters.week_day as string
     const subject = filters.subject as string
@@ -26,19 +23,15 @@ export default class ClassesController {
     const timeInMinutes = convertHourToMinutes(time)
 
     const schedule = await db('classes')
-    .where('classes.subject', '=', subject)
-    .join('users', 'classes.user_id', '=', 'users.id')
-    .join('class_schedule', 'class_schedule.class_id', '=', 'classes.id')
-    .select(['classes.*', 'users.*', 'class_schedule.*'])
-    .whereExists(function () {
-      this.select('class_schedule.*')
-        .from('class_schedule')
-        .whereRaw('`class_schedule`.`week_day` = ?', [week_day])
-        .whereRaw('`class_schedule`.`from` <= ?', [timeInMinutes])
-        .whereRaw('`class_schedule`.`to` > ?', [timeInMinutes])
-        .whereRaw('`class_schedule`.`class_id` = `classes`.`id`')
-    })
-    
+      .where('classes.subject', '=', subject)
+      .join('users', 'users.id', '=', 'classes.user_id')
+      .join('class_schedule', function () {
+        this.on('class_id', '=', 'classes.id')
+        this.on('week_day', '=', db.raw(week_day))
+        this.on('from', '<=', db.raw(timeInMinutes))
+        this.on('to', '>', db.raw(timeInMinutes))
+      })
+
     return response.json(schedule)
   }
 
@@ -49,7 +42,7 @@ export default class ClassesController {
 
     try {
 
-      const  [user] = await trx('users').where({ name })
+      const [user] = await trx('users').where({ name })
 
       let user_id = user ? user.id : null
 
@@ -67,8 +60,6 @@ export default class ClassesController {
         subject,
         cost
       })
-
-
 
       const classSchedule = schedule.map((s: ScheduleItem) => {
         return {
